@@ -19,8 +19,18 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython virtualenv
 
+      - name: Setup Android SDK Path & Auto-Accept Licenses
+        run: |
+          # বিল্ডোজার রান করার আগে অটোমেটিক অ্যান্ড্রয়েড SDK লাইসেন্স এক্সেপ্ট করার ট্রিক
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+          mkdir -p ~/.buildozer/android/platform/android-sdk/licenses
+          echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
+          echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > ~/.buildozer/android/platform/android-sdk/licenses/android-sdk-preview-license
+
       - name: Build with Buildozer
         run: |
+          # এখানে আমরা সরাসরি বিল্ডোজার রান করব এবং এটি কোনো ইনপুট ছাড়াই এগোবে
           buildozer -v android debug
         env:
           ACCEPT_SDK_LICENSE: "y"
