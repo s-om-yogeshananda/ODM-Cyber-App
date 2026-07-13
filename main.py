@@ -19,14 +19,14 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython virtualenv
 
-      - name: Auto Accept Android SDK Licenses
-        run: |
-          mkdir -p ~/.android
-          touch ~/.android/repositories.cfg
-          # এখানে বিল্ডোজারকে অটো-লাইসেন্স এক্সেপ্ট করার জন্য গাইড করা হচ্ছে
-
       - name: Build with Buildozer
         run: |
-          # প্রথম রান যাতে SDK/NDK লাইসেন্স অটোমেটিক সেটআপ হয়
-          buildozer android debug || echo "Initial setup done, compiling main frame..."
           buildozer -v android debug
+        env:
+          ACCEPT_SDK_LICENSE: "y"
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ODM-Cyberpunk-App
+          path: bin/*.apk
